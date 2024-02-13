@@ -13,26 +13,36 @@ from botocore.exceptions import ClientError
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-def get_credentials_from_env():
-    # Leer las variables de entorno
-    env_vars = {
-        "token": os.environ.get("GMAIL_TOKEN"),
-        "refresh_token": os.environ.get("GMAIL_REFRESH_TOKEN"),
-        "token_uri": os.environ.get("GMAIL_TOKEN_URI"),
-        "client_id": os.environ.get("GMAIL_CLIENT_ID"),
-        "client_secret": os.environ.get("GMAIL_CLIENT_SECRET"),
-        "scopes": os.environ.get("GMAIL_SCOPES"),
-        "expiry": os.environ.get("GMAIL_EXPIRY")
-    }
+def get_secret():
 
-    # Crear instancias de Credentials desde las variables de entorno
-    creds = Credentials.from_authorized_user_info(env_vars)
-    return creds
+    secret_name = "tokens/token-email"
+    region_name = "us-east-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        # For a list of exceptions thrown, see
+        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        logger.error(f"Error getting secret: {e}")
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    return secret
     
 
 def lambda_handler(event, context):
-    # Obtener las credenciales desde variables de entorno
-    creds = get_credentials_from_env()
+    # Obtener las credenciales desde Secrets Manager
+    secret_data = get_secret()
+    creds = Credentials.from_authorized_user_info(secret_data)
 
     service = build('gmail', 'v1', credentials=creds)
 
