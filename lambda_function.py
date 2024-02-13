@@ -32,9 +32,11 @@ def get_secret():
     except ClientError as e:
         # For a list of exceptions thrown, see
         # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        logger.error(f"Error getting secret: {e}")
         raise e
 
     secret = get_secret_value_response['SecretString']
+    return secret
     
 
 def lambda_handler(event, context):
