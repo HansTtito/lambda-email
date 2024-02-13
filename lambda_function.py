@@ -16,16 +16,13 @@ logger.setLevel(logging.INFO)
 def get_credentials_from_env():
     # Leer las variables de entorno
     env_vars = {
-        "type": os.environ.get("GMAIL_TYPE"),
-        "project_id": os.environ.get("GMAIL_PROJECT_ID"),
-        "private_key_id": os.environ.get("GMAIL_PRIVATE_KEY_ID"),
-        "private_key": os.environ.get("GMAIL_PRIVATE_KEY").replace('\\n', '\n'),  # Ajustar formato de la clave privada
-        "client_email": os.environ.get("GMAIL_CLIENT_EMAIL"),
-        "client_id": os.environ.get("GMAIL_CLIENT_ID"),
-        "auth_uri": os.environ.get("GMAIL_AUTH_URI"),
+        "token": os.environ.get("GMAIL_TOKEN"),
+        "refresh_token": os.environ.get("GMAIL_REFRESH_TOKEN"),
         "token_uri": os.environ.get("GMAIL_TOKEN_URI"),
-        "auth_provider_x509_cert_url": os.environ.get("GMAIL_AUTH_PROVIDER_CERT_URL"),
-        "client_x509_cert_url": os.environ.get("GMAIL_CLIENT_CERT_URL")
+        "client_id": os.environ.get("GMAIL_CLIENT_ID"),
+        "client_secret": os.environ.get("GMAIL_CLIENT_SECRET"),
+        "scopes": os.environ.get("GMAIL_SCOPES"),
+        "expiry": os.environ.get("GMAIL_EXPIRY")
     }
 
     # Crear instancias de Credentials desde las variables de entorno
