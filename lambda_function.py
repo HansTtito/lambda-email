@@ -13,36 +13,29 @@ from botocore.exceptions import ClientError
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-def get_secret():
+def get_credentials_from_env():
+    # Leer las variables de entorno
+    env_vars = {
+        "type": os.environ.get("GMAIL_TYPE"),
+        "project_id": os.environ.get("GMAIL_PROJECT_ID"),
+        "private_key_id": os.environ.get("GMAIL_PRIVATE_KEY_ID"),
+        "private_key": os.environ.get("GMAIL_PRIVATE_KEY").replace('\\n', '\n'),  # Ajustar formato de la clave privada
+        "client_email": os.environ.get("GMAIL_CLIENT_EMAIL"),
+        "client_id": os.environ.get("GMAIL_CLIENT_ID"),
+        "auth_uri": os.environ.get("GMAIL_AUTH_URI"),
+        "token_uri": os.environ.get("GMAIL_TOKEN_URI"),
+        "auth_provider_x509_cert_url": os.environ.get("GMAIL_AUTH_PROVIDER_CERT_URL"),
+        "client_x509_cert_url": os.environ.get("GMAIL_CLIENT_CERT_URL")
+    }
 
-    secret_name = "tokens/token-email"
-    region_name = "us-east-1"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    try:
-        get_secret_value_response = client.get_secret_value(
-            SecretId=secret_name
-        )
-    except ClientError as e:
-        # For a list of exceptions thrown, see
-        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
-        logger.error(f"Error getting secret: {e}")
-        raise e
-
-    secret = get_secret_value_response['SecretString']
-    return secret
+    # Crear instancias de Credentials desde las variables de entorno
+    creds = Credentials.from_authorized_user_info(env_vars)
+    return creds
     
 
 def lambda_handler(event, context):
-    # Obtener las credenciales desde Secrets Manager
-    secret_data = get_secret()
-    creds = Credentials.from_authorized_user_info(secret_data)
+    # Obtener las credenciales desde variables de entorno
+    creds = get_credentials_from_env()
 
     service = build('gmail', 'v1', credentials=creds)
 
