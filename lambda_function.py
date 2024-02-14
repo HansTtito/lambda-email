@@ -14,6 +14,7 @@ def download_token_from_s3(bucket_name, object_key):
         print(f"Error al descargar el archivo desde S3: {e}")
         return None
 
+
 def lambda_handler(event, context):
     # Descargar el archivo de token desde S3
     bucket_name = 'token-access'  # Reemplaza con tu nombre de bucket
@@ -38,3 +39,5 @@ def lambda_handler(event, context):
             print(f"Asunto: {msg['subject']}")
     else:
         print("No se pudo descargar el archivo de token desde S3.")
+        
+        
