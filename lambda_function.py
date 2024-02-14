@@ -3,10 +3,9 @@ import boto3
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
-
 def download_token_from_s3(bucket_name, object_key):
     s3 = boto3.client('s3')
-    local_file_path = 'D:/descargas/token.json'  # Puedes ajustar la ruta según tus necesidades
+    local_file_path = '/tmp/token.json'  # Puedes ajustar la ruta según tus necesidades
 
     try:
         s3.download_file(bucket_name, object_key, local_file_path)
@@ -14,7 +13,6 @@ def download_token_from_s3(bucket_name, object_key):
     except Exception as e:
         print(f"Error al descargar el archivo desde S3: {e}")
         return None
-
 
 def lambda_handler(event, context):
     # Descargar el archivo de token desde S3
