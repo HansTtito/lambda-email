@@ -7,6 +7,7 @@ from dateutil import parser
 import csv
 import json
 import io
+import pytz
 
 def lambda_handler(event, context):
     
@@ -65,9 +66,15 @@ def lambda_handler(event, context):
                 # Obtener la fecha y hora del correo
                 date_str = msg['payload']['headers'][1]['value']
                 date_obj = parser.parse(date_str.split(';')[-1].strip())
-                fecha_envio = date_obj.strftime('%Y-%m-%d')
-                hora_envio = date_obj.strftime('%H:%M:%S')
-                
+
+                # Convertir la fecha y hora a la zona horaria de Perú
+                peru_timezone = pytz.timezone('America/Lima')
+                date_obj_peru = date_obj.astimezone(peru_timezone)
+
+                # Formatear la fecha y hora en el formato deseado
+                fecha_envio = date_obj_peru.strftime('%Y-%m-%d')
+                hora_envio = date_obj_peru.strftime('%H:%M:%S')
+
                 # Crear una lista que represente cada fila del CSV
                 csv_row = [fecha_envio, hora_envio, empresa]
 
