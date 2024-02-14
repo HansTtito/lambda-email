@@ -4,7 +4,6 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from botocore.exceptions import ClientError
 
-
 def get_secret():
 
     secret_name = "TokenGmailSNP"
