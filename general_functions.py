@@ -14,3 +14,10 @@ def guardar_archivo_en_s3(s3_client, content, s3_key, s3_bucket_name):
 
     except Exception as e:
         print(f"Error al guardar el archivo CSV en S3: {e}")
+
+def eliminar_archivo_en_s3(s3_client, bucket_name, key):
+    try:
+        s3_client.delete_object(Bucket=bucket_name, Key=key)
+        print(f"Archivo eliminado en S3: {key}")
+    except Exception as e:
+        print(f"Error al eliminar el archivo en S3: {e}")
