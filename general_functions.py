@@ -1,9 +1,13 @@
 
 
 def read_files_from_bucket(s3_client, bucket_name, object_key, index_bucket = 'Body'):
-    
-    response = s3_client.get_object(Bucket = bucket_name, Key = object_key)
-    output = response[index_bucket].read().decode('utf-8', errors='replace')
+    try: 
+        response = s3_client.get_object(Bucket = bucket_name, Key = object_key)
+        output = response[index_bucket].read().decode('utf-8', errors='replace')
+        print(f"Archivo CSV leído: {object_key}")
+        
+    except Exception as e:
+        print(f"Error al leer el archivo CSV en S3: {e}")
         
     return output
 
