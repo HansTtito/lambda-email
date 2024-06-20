@@ -30,33 +30,10 @@ def lambda_handler(event, context):
     headers_email = {
        'Content-Type': 'application/x-www-form-urlencoded'
     }
-      
-    correos_lista = [
-    {'EMPRESA': 'CFG-Copeinca', 'PERSONA A CARGO': 'Cynthia Vasquez', 'CORREO': 'cvasquez@copeinca.com.pe', 'label_empresa': 'cfg-copeinca'},
-    {'EMPRESA': 'CFG-Copeinca', 'PERSONA A CARGO': 'BOT-CFG-Copeinca', 'CORREO': 'user_rpa@copeinca.com.pe', 'label_empresa': 'cfg-copeinca'},
-    {'EMPRESA': 'CFG-Copeinca', 'PERSONA A CARGO': 'BOT2-CFG-Copeinca', 'CORREO': 'user_rpa2@copeinca.com.pe', 'label_empresa': 'cfg-copeinca'},
-    {'EMPRESA': 'Tecnologica de alimentos (TASA)', 'PERSONA A CARGO': 'Lucero Moreno', 'CORREO': 'lmoreno@tasa.com.pe', 'label_empresa': 'tasa'},
-    {'EMPRESA': 'Tecnologica de alimentos (TASA)', 'PERSONA A CARGO': 'Claudia Juarez', 'CORREO': 'cjuarez@tasa.com.pe', 'label_empresa': 'tasa'},
-    {'EMPRESA': 'Pesquera Hayduk', 'PERSONA A CARGO': 'Anthony Ramirez', 'CORREO': 'aramirez@hayduk.com.pe', 'label_empresa': 'hayduk'},
-    {'EMPRESA': 'Pesquera Hayduk', 'PERSONA A CARGO': 'Correo automatico', 'CORREO': 'enviofile2@hayduk.com.pe', 'label_empresa': 'hayduk'},
-    {'EMPRESA': 'Pesquera Diamante', 'PERSONA A CARGO': 'Susan Montero', 'CORREO': 'smontero@diamante.com.pe', 'label_empresa': 'diamante'},
-    {'EMPRESA': 'Pesquera Diamante', 'PERSONA A CARGO': 'Alejo Campos', 'CORREO': 'acampos@diamante.com.pe', 'label_empresa': 'diamante'},
-    {'EMPRESA': 'Pesquera Exalmar', 'PERSONA A CARGO': 'Jhon Robles', 'CORREO': 'jrobles@exalmar.com.pe', 'label_empresa': 'exalmar'},
-    {'EMPRESA': 'Pesquera Exalmar', 'PERSONA A CARGO': 'Centro Control Pesca', 'CORREO': 'exalmarpa@exalmar.com.pe', 'label_empresa': 'exalmar'},
-    {'EMPRESA': 'Pesquera Centinela', 'PERSONA A CARGO': 'Leslie Meza Carranza', 'CORREO': 'Lmezac@centinela.com.pe', 'label_empresa': 'centinela'},
-    {'EMPRESA': 'Pesquera Centinela', 'PERSONA A CARGO': 'Centro pesca', 'CORREO': 'Satelital@centinela.com.pe', 'label_empresa': 'centinela'},
-    {'EMPRESA': 'Austral Group', 'PERSONA A CARGO': 'Edder Chocce', 'CORREO': 'echocce@austral.com.pe', 'label_empresa': 'austral'},
-    {'EMPRESA': 'Austral Group', 'PERSONA A CARGO': 'Jair Siles', 'CORREO': 'jsiles@austral.com.pe', 'label_empresa': 'austral'},
-    {'EMPRESA': 'Los Halcones', 'PERSONA A CARGO': 'Oswaldo Oliveira', 'CORREO': 'oswaml_128_3@hotmail.com', 'label_empresa': 'halcones'},
-    {'EMPRESA': 'Pesquera Capricornio', 'PERSONA A CARGO': 'Bruno Armas', 'CORREO': 'bahia@pcapricornio.com.pe', 'label_empresa': 'capricornio'},
-    {'EMPRESA': 'Pesquera Capricornio', 'PERSONA A CARGO': 'Bruno Armas', 'CORREO': 'brunoarmas197018@gmail.com', 'label_empresa': 'capricornio'},
-    {'EMPRESA': 'Pesquera Isa/Ninfas/Majat', 'PERSONA A CARGO': 'Enrique Vissetti', 'CORREO': 'enrique.vissetti@grupoinm.pe', 'label_empresa': 'Isa'},
-    {'EMPRESA': 'Inversiones Eccola', 'PERSONA A CARGO': 'Walter Vera', 'CORREO': 'wvera@carmenluisa.com', 'label_empresa': 'eccola'},
-    {'EMPRESA': 'Inversiones Quiaza', 'PERSONA A CARGO': 'Ronny Silva', 'CORREO': 'iqronnysilvafarfan@gmail.com', 'label_empresa': 'quiaza'},
-    {'EMPRESA': 'Inversiones Quiaza', 'PERSONA A CARGO': 'Ronny Silva', 'CORREO': 'flota1@quiaza.com', 'label_empresa': 'quiaza'},
-    {'EMPRESA': 'SNP', 'PERSONA A CARGO': 'Gabriela Lecca', 'CORREO': 'asistente@ihma.org.pe', 'label_empresa': 'SNP'},
-    {'EMPRESA': 'SNP', 'PERSONA A CARGO': 'Gloria Meneses', 'CORREO': 'emeneses@snp.org.pe', 'label_empresa': 'SNP'}
-    ]
+
+    correos = read_files_from_bucket(s3, main_bucket_name,'extras/emails.csv')   
+    df = pd.read_csv(io.StringIO(correos))
+    correos_lista = df.to_dict(orient='records')
     
     try:
 
