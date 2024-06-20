@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     # Obtener los datos del token desde S3
     bucket_name = 'token-access-preprod'  # bucket json
     object_key = 'token_test_2.json'  # token access
-    main_bucket_name = 'snp-files-preprod'
+    main_bucket_name = client_ssm.get_parameter(Name='bucket_name')['Parameter']['Value']
     correos = read_files_from_bucket(s3, main_bucket_name,'extras/emails.csv')   
     correos_lista = pd.read_csv(io.StringIO(correos))
     
